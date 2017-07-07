@@ -1,0 +1,17 @@
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.sun.javafx.application.LauncherImpl.launchApplicationWithArgs(LauncherImpl.java:389)
+	at com.sun.javafx.application.LauncherImpl.launchApplication(LauncherImpl.java:328)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at sun.launcher.LauncherHelper$FXHelper.main(Unknown Source)
+Caused by: java.util.NoSuchElementException: No line found
+	at java.util.Scanner.nextLine(Unknown Source)
+	at main.main(main.java:25)
+	... 11 more
+Exception running application main
