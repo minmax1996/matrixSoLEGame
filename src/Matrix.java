@@ -14,18 +14,35 @@ public class Matrix {
     public Line [] matrixArray;
     public int n;
 
-    Matrix(int n) { //создаем еденичную матрицу со значениями 1..n
+    Matrix(int n) { //создаем еденичную матрицу со значениями 1..n и рандомным значением вектора [-5,5]
         this.n=n;
+        Random rnd = new Random();
         matrixArray = new Line[n];
         for (int i = 0; i < n; ++i) {
             matrixArray[i] = new Line(n);
             matrixArray[i].lineVector[i] = 1;
-            matrixArray[i].value=i+1;
+            matrixArray[i].value=rnd.nextInt(10)-5;
+        }
+    }
+
+    Matrix(int n,double[][] a, double[] b){
+        this.n=n;
+        matrixArray=new Line[n];
+        for (int i = 0; i < n; ++i) {
+            matrixArray[i] = new Line(a[i], b[i] ,n);
         }
 
     }
+    public boolean isSolved(){
+        for(int i=0; i<this.n; ++i){
+            if(!matrixArray[i].isLineSolved()){
+                return false;
+            }
+        }
+        return true;
+    }
 
-    public  Matrix SwapLines(int first, int second){
+    public Matrix SwapLines(int first, int second){
         for (int i = 0; i < n; ++i) {
             Line tmp = new Line(matrixArray[first]);
             matrixArray[first]=matrixArray[second];
@@ -42,7 +59,6 @@ public class Matrix {
            System.out.println("\t |"+matrixArray[i].value);
         }
     }
-
 
     public void PrintEq() {
         try {
@@ -86,19 +102,20 @@ public class Matrix {
             System.setErr(new PrintStream(new File("shuffle.txt")));
             Random rnd = new Random();
 
-            Matrix ones = new Matrix(this.n);
-
+            //создается верхнетреугольная матрица, имеющаяя решение
             for (int i = 0; i < this.n-1; ++i) {
-                //this.matrixArray[rnd.nextInt(this.n)].SumVectors(this.matrixArray[rnd.nextInt(this.n)].AMulVector(rnd.nextInt(5)-10));
                 for (int j = i+1; j < this.n; ++j) {
-                    int bb = rnd.nextInt(count) - 5;
-                    this.matrixArray[i].SumVectors(this.matrixArray[j].AMulVector(bb)); //создается верхнетреугольная матрица, имеющаяя решение
-                    //System.err.println("складываем" + i + "строку с " + j + "строкой умноженной на" + bb);
+                    int bb = rnd.nextInt(count) - count/2;
+                    if (bb==0) bb++;
+                    //i'тая строка складывается с j'той умноженной на рандомное число
+                    this.matrixArray[i].SumVectors(this.matrixArray[j].AMulVector(bb));
+                    System.err.println("C"+(i+1)+" +"+bb+"C"+(j+1));
                 }
             }
 
+            //еще один прогон, i'тая строка складываается с рандомной строкой, умноженной на рандомое число
             for (int i = 0; i < this.n; ++i) {
-                this.matrixArray[i].SumVectors(this.matrixArray[rnd.nextInt(this.n)].AMulVector(rnd.nextInt(count)-5));
+                this.matrixArray[i].SumVectors(this.matrixArray[rnd.nextInt(this.n)].AMulVector(rnd.nextInt(count)-count/2));
             }
 
             } catch (FileNotFoundException e) {

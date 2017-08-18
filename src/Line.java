@@ -18,7 +18,7 @@ public class Line {
 
     Line(double [] a, double b, int n)
     {
-        n=n;
+        this.n=n;
         lineVector = new double[n];
         //lineVector=System.arraycopy();
         System.arraycopy(a, 0, lineVector, 0, a.length);
@@ -34,9 +34,11 @@ public class Line {
 
     public Line MulVector(double number){
         for (int i = 0; i < this.lineVector.length; ++i) {
-            this.lineVector[i] *= number;
+            if(this.lineVector[i]!=0.0)
+                this.lineVector[i]*= number ;
         }
-        this.value*=number;
+        if(this.value!=0.0)
+            this.value*=number;
         return this;
     }
 
@@ -57,13 +59,27 @@ public class Line {
         return res;
     }
 
-
     public Line SumVectors(Line second) {
         for (int i = 0; i < this.lineVector.length; ++i) {
             this.lineVector[i] += second.lineVector[i];
         }
         this.value+=second.value;
         return this;
+    }
+
+    public boolean isLineSolved(){
+        int count=0;
+        for (int i=0; i<this.n; ++i){
+            if (this.lineVector[i]!=0.0) {
+                ++count;
+            }
+        }
+        if (count==1 && this.value!=0){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }
 

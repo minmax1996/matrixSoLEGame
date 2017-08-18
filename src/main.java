@@ -12,31 +12,59 @@ import java.util.Scanner;
 public class main extends Application {
 
     public static void main(String[] args) {
-        Matrix mainMatrix = new Matrix(5);
-
-        mainMatrix.ShuffleArray(10);
-        mainMatrix.PrintArray();
-        System.out.println("_____________");
-        mainMatrix.PrintEq();
         Scanner sc = new Scanner(System.in);
-        while (true) {
-            String query;
-            System.out.println("введите запрос: ");
-            query = sc.nextLine();
-            switch (query) {
-                case "help":
-                    System.out.println("eq for print equation \n 2C1 + 3C4 \n 2C1 \n -C1 \n [+,-] \n C1 / 5 \n C1 ~ C2 ");
-                    continue;
-                case "eq":
-                    mainMatrix.PrintEq();
-                    continue;
-                case "exit":
-                    return;
-            }
-            ParseQuery(query, mainMatrix);
-            mainMatrix.PrintArray();
+        System.out.println("1: ввести матрицу");
+        System.out.println("2: играть с рандомной");
+
+        int fit = sc.nextInt();
+
+
+        switch (fit){
+            case 1:
+                System.out.println("введите размер матрицы:");
+                int N=sc.nextInt();
+                double [][]A=new double[N][N];
+                double [] b=new double[N];
+                ParseInputMatrix(A,b,N);
+                Matrix readedMatrix=new Matrix(N,A,b);
+
+                PlayMatrix(readedMatrix);
+                return;
+
+
+            case 2:
+                System.out.println("введите размер матрицы:");
+                int n=sc.nextInt();
+                Matrix mainMatrix = new Matrix(n);
+                mainMatrix.ShuffleArray(10);
+
+                PlayMatrix(mainMatrix);
+                return;
+
+
+            default:
+                System.out.print("lame");
+                break;
         }
+
+
+
         //launch(args);
+    }
+
+    public static void ParseInputMatrix(double[][]A,double[]b,int N){
+        //TODO вынести в отдельную функцию парсинг этого всего
+        for (int i=0; i < N; ++i) {
+            System.out.println("введите "+(i+1)+" строку через пробел");
+            Scanner sc2 = new Scanner(System.in);
+            String rLine =sc2.nextLine();
+            String [] readedLine=rLine.split("[ ]+");
+            for (int j=0; j < N; ++j){
+                A[i][j]=Integer.parseInt(readedLine[j]);
+            }
+            System.out.println("введите значение строки:");
+            b[i]=sc2.nextDouble();
+        }
     }
 
     public static void ParseQuery(String query,Matrix mainMatrix)
@@ -85,6 +113,32 @@ public class main extends Application {
         }
     }
 
+    public static void PlayMatrix(Matrix mainMatrix){
+        Scanner sc = new Scanner(System.in);
+        mainMatrix.PrintArray();
+        System.out.println("_____________");
+        mainMatrix.PrintEq();
+        while (!mainMatrix.isSolved()) {
+            String query;
+            System.out.println("введите запрос: ");
+            query = sc.nextLine();
+            switch (query) {
+                case "help":
+                    System.out.println("eq for print equation \n 2C1 + 3C4 \n 2C1 \n -C1 \n [+,-] \n C1 / 5 \n C1 ~ C2 ");
+                    continue;
+                case "eq":
+                    mainMatrix.PrintEq();
+                    continue;
+                case "exit":
+                    return;
+            }
+            ParseQuery(query, mainMatrix);
+            mainMatrix.PrintArray();
+        }
+
+        System.out.println("congratulation");
+        mainMatrix.PrintEq();
+    }
 
 
     public void start(Stage primaryStage) {
