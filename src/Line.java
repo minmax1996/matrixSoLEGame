@@ -4,7 +4,7 @@
 
 public class Line {
     public double [] lineVector;
-    public double value;
+//    public double value;
     int n;
 
     Line(int _n){
@@ -13,23 +13,19 @@ public class Line {
         for (int i=0; i<n;++i) {
             lineVector[i] = 0;
         }
-        value=0;
     }
 
-    Line(double [] a, double b, int n)
+    Line(double [] a, int n)
     {
         this.n=n;
         lineVector = new double[n];
-        //lineVector=System.arraycopy();
         System.arraycopy(a, 0, lineVector, 0, a.length);
-        this.value=b;
     }
 
     Line( Line second){
-        n=second.n;
-        lineVector=new double[n];
-        System.arraycopy(second.lineVector, 0, lineVector, 0, n);
-        value=second.value;
+        this.n=second.n;
+        this.lineVector=new double[n];
+        System.arraycopy(second.lineVector, 0, this.lineVector, 0, n);
     }
 
     public Line MulVector(double number){
@@ -37,8 +33,6 @@ public class Line {
             if(this.lineVector[i]!=0.0)
                 this.lineVector[i]*= number ;
         }
-        if(this.value!=0.0)
-            this.value*=number;
         return this;
     }
 
@@ -46,16 +40,14 @@ public class Line {
         for (int i = 0; i < this.lineVector.length; ++i) {
             this.lineVector[i] /= number;
         }
-        this.value/=number;
         return this;
     }
 
-    public  Line AMulVector(double number){
+    public Line AMulVector(double number){
         Line res=new Line(this.n);
         for (int i = 0; i < res.lineVector.length; ++i) {
             res.lineVector[i] = this.lineVector[i] * number;
         }
-        res.value=this.value*number;
         return res;
     }
 
@@ -63,23 +55,30 @@ public class Line {
         for (int i = 0; i < this.lineVector.length; ++i) {
             this.lineVector[i] += second.lineVector[i];
         }
-        this.value+=second.value;
         return this;
     }
 
-    public boolean isLineSolved(){
+    public int CountOfNotZeroElements(){
         int count=0;
         for (int i=0; i<this.n; ++i){
             if (this.lineVector[i]!=0.0) {
                 ++count;
             }
         }
-        if (count==1 && this.value!=0){
-            return true;
-        }else{
-            return false;
-        }
+        return count;
 
+    }
+
+    public double[] LineWithOut(int i){
+        double res[]=new double[this.n-1];
+        int j=0;
+        for (int k=0;k<this.n;++k){
+            if(k!=i){
+                res[j]=this.lineVector[k];
+                j++;
+            }
+        }
+        return res;
     }
 }
 

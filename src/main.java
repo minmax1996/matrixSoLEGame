@@ -8,45 +8,50 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-
 public class main extends Application {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("1: ввести матрицу");
-        System.out.println("2: играть с рандомной");
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("1: ввести матрицу");
+            System.out.println("2: играть с рандомной");
 
-        int fit = sc.nextInt();
-
-
-        switch (fit){
-            case 1:
-                System.out.println("введите размер матрицы:");
-                int N=sc.nextInt();
-                double [][]A=new double[N][N];
-                double [] b=new double[N];
-                ParseInputMatrix(A,b,N);
-                Matrix readedMatrix=new Matrix(N,A,b);
-
-                PlayMatrix(readedMatrix);
-                return;
+            int fit = sc.nextInt();
 
 
-            case 2:
-                System.out.println("введите размер матрицы:");
-                int n=sc.nextInt();
-                Matrix mainMatrix = new Matrix(n);
-                mainMatrix.ShuffleArray(10);
+            switch (fit) {
+                case 1: //ввод
+                    System.out.println("введите размер матрицы:");
+                    int N = sc.nextInt();
+                    double[][] A = new double[N][N];
+                    double[] b = new double[N];
+                    ParseInputMatrix(A, b, N);
+                    SOLEMatrix readMatrix = new SOLEMatrix(N, A, b);
 
-                PlayMatrix(mainMatrix);
-                return;
+                    PlayMatrix(readMatrix);
+                    return;
 
 
-            default:
-                System.out.print("lame");
-                break;
+                case 2: //рандом
+                    System.out.println("введите размер матрицы:");
+                    int n = sc.nextInt();
+                    SOLEMatrix mainMatrix = new SOLEMatrix(n);
+                    mainMatrix.ShuffleArray();
+
+                    PlayMatrix(mainMatrix);
+                    return;
+                case 3: //testdev
+
+
+                    return;
+
+                default:
+                    System.out.print("lame");
+                    break;
+            }
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.err.print("ArrayIndexOutOfBoundsException");
         }
-
 
 
         //launch(args);
@@ -58,16 +63,16 @@ public class main extends Application {
             System.out.println("введите "+(i+1)+" строку через пробел");
             Scanner sc2 = new Scanner(System.in);
             String rLine =sc2.nextLine();
-            String [] readedLine=rLine.split("[ ]+");
+            String [] readLine=rLine.split("[ ]+");
             for (int j=0; j < N; ++j){
-                A[i][j]=Integer.parseInt(readedLine[j]);
+                A[i][j]=Integer.parseInt(readLine[j]);
             }
             System.out.println("введите значение строки:");
             b[i]=sc2.nextDouble();
         }
     }
 
-    public static void ParseQuery(String query,Matrix mainMatrix)
+    public static void ParseQuery(String query,SOLEMatrix mainMatrix)
     {
 
         String[] tokens = query.split("[ ]+"); //4C1 + 2C2 =>   [4C1, +, 2C2]
@@ -76,7 +81,7 @@ public class main extends Application {
         int enterLine = Integer.parseInt("" + tokensAroundC1[1]) - 1;
         if (!tokensAroundC1[0].equals("")) { //если у первой строки указан множитель, то умножает эту строку на него
             double mulN=(tokensAroundC1[0].equals("-")) ? -1 : Double.parseDouble("" + tokensAroundC1[0]); //если строит просто "-" => умножаем на -1;
-            mainMatrix.matrixArray[enterLine].MulVector(mulN);
+            mainMatrix.MulVector(enterLine,mulN);
         }
 
         if (tokens.length > 1) //если наша операция имеет > 1 операнда
@@ -99,11 +104,14 @@ public class main extends Application {
                     }
 
                     //выполняем операцию
-                    mainMatrix.matrixArray[enterLine].SumVectors(mainMatrix.matrixArray[secondLine].AMulVector(mulNumber));
+//                    mainMatrix.matrixArray[enterLine].SumVectors(mainMatrix.matrixArray[secondLine].AMulVector(mulNumber));
+                    mainMatrix.SumVectors(enterLine,secondLine,mulNumber);
                     break;
+
                 case "/": //если деление, то операция выглядит 2С3 / 5
                     double mulN = Double.parseDouble(tokens[2]); //
-                    mainMatrix.matrixArray[enterLine].DivVector(mulN);
+//                    mainMatrix.matrixArray[enterLine].DivVector(mulN);
+                    mainMatrix.DivVector(enterLine,mulN);
                     break;
                 case "~": // свапаем 1 строку с другой
                     String[] tokensAroundC2S = tokens[2].split("[C,c]+"); // 3C1-> 3, 1; тут не учитывается умножение строки на число
@@ -113,7 +121,7 @@ public class main extends Application {
         }
     }
 
-    public static void PlayMatrix(Matrix mainMatrix){
+    public static void PlayMatrix(SOLEMatrix mainMatrix){
         Scanner sc = new Scanner(System.in);
         mainMatrix.PrintArray();
         System.out.println("_____________");
