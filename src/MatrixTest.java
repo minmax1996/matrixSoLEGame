@@ -7,17 +7,17 @@ import static org.junit.Assert.*;
  */
 public class MatrixTest {
 
+    private  Matrix TestMatrix5;
+    private static double [][] TestArray5={{1,2,3,4,5},{5,4,3,2,1},{3,8,4,2,7},{5,3,2,1,5},{3,1,4,1,4}};
+
     @org.junit.Before
     public void setUp() throws Exception {
-        double [][] TestArray5={{1,2,3,4,5},{5,4,3,2,1},{3,8,4,2,7},{5,3,2,1,5},{3,1,4,1,4}};
         Matrix TestMatrix5=new Matrix(5,TestArray5);
     }
 
     @org.junit.Test
     public void swapLines() throws Exception {
-        double [][] TestArray5={{1,2,3,4,5},{5,4,3,2,1},{3,8,4,2,7},{5,3,2,1,5},{3,1,4,1,4}};
         Matrix TestMatrix5=new Matrix(5,TestArray5);
-
         TestMatrix5.SwapLines(2,3);
 
         assertArrayEquals(TestArray5[2],TestMatrix5.matrixArray[3].lineVector,0.0001);
@@ -25,7 +25,6 @@ public class MatrixTest {
     }
     @org.junit.Test
     public void sumVectors() throws Exception {
-        double [][] TestArray5={{1,2,3,4,5},{5,4,3,2,1},{3,8,4,2,7},{5,3,2,1,5},{3,1,4,1,4}};
         Matrix TestMatrix5=new Matrix(5,TestArray5);
 
         TestMatrix5.SumVectors(0,1);
@@ -40,7 +39,6 @@ public class MatrixTest {
 
     @org.junit.Test
     public void mulVector() throws Exception {
-        double [][] TestArray5={{1,2,3,4,5},{5,4,3,2,1},{3,8,4,2,7},{5,3,2,1,5},{3,1,4,1,4}};
         Matrix TestMatrix5=new Matrix(5,TestArray5);
 
         TestMatrix5.MulVector(0,-1);
@@ -53,7 +51,6 @@ public class MatrixTest {
 
     @org.junit.Test
     public void divVector() throws Exception {
-        double [][] TestArray5={{1,2,3,4,5},{5,4,3,2,1},{3,8,4,2,7},{5,3,2,1,5},{3,1,4,1,4}};
         Matrix TestMatrix5=new Matrix(5,TestArray5);
 
         TestMatrix5.DivVector(0,-1);
@@ -66,12 +63,6 @@ public class MatrixTest {
 
     @org.junit.Test
     public void m() throws Exception {
-        double [][] TestArray5={{1,2,3,4,5},
-                                {5,4,3,2,1},
-                                {3,8,4,2,7},
-                                {5,3,2,1,5},
-                                {3,1,4,1,4}};
-
         double [][] ExpectedM11={{1,3,4,5},
                                 {3,4,2,7},
                                 {5,2,1,5},

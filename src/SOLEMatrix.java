@@ -24,7 +24,9 @@ public class SOLEMatrix extends Matrix {
 
     public SOLEMatrix(int n, double [][]a,double []b){
         super(n,a);
-        this.ValueVector=b;
+
+        this.ValueVector=new double[n];
+        System.arraycopy(b, 0, this.ValueVector, 0, a.length);
     }
 
     public boolean isSolved(){
@@ -96,7 +98,7 @@ public class SOLEMatrix extends Matrix {
     @Override
     public SOLEMatrix SumVectors(int first, int to) {
         super.SumVectors(first, to);
-        ValueVector[first]+=ValueVector[to];
+        this.ValueVector[first]+=this.ValueVector[to];
         return this;
     }
 
@@ -116,8 +118,10 @@ public class SOLEMatrix extends Matrix {
 
     @Override
     public SOLEMatrix DivVector(int first, double DivValue){
-        super.DivVector(first,DivValue);
-        ValueVector[first]/=DivValue;
+        if(DivValue!=0) {
+            super.DivVector(first,DivValue);
+            ValueVector[first] /= DivValue;
+        }
         return this;
     }
 
