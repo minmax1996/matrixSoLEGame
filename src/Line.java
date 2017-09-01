@@ -37,10 +37,13 @@ public class Line {
     }
 
     public Line DivVector(double number){
-        for (int i = 0; i < this.lineVector.length; ++i) {
-            this.lineVector[i] /= number;
+        if (number!=0){
+            for (int i = 0; i < this.lineVector.length; ++i) {
+                this.lineVector[i] /= number;
+            }
         }
         return this;
+
     }
 
     public Line AMulVector(double number){

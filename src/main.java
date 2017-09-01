@@ -11,54 +11,63 @@ import java.util.Scanner;
 public class main extends Application {
 
     public static void main(String[] args) {
-        try {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("1: ввести матрицу");
-            System.out.println("2: играть с рандомной");
-
-            int fit = sc.nextInt();
-
-
-            switch (fit) {
-                case 1: //ввод
-                    System.out.println("введите размер матрицы:");
-                    int N = sc.nextInt();
-                    double[][] A = new double[N][N];
-                    double[] b = new double[N];
-                    ParseInputMatrix(A, b, N);
-                    SOLEMatrix readMatrix = new SOLEMatrix(N, A, b);
-
-                    PlayMatrix(readMatrix);
-                    return;
-
-
-                case 2: //рандом
-                    System.out.println("введите размер матрицы:");
-                    int n = sc.nextInt();
-                    SOLEMatrix mainMatrix = new SOLEMatrix(n);
-                    mainMatrix.ShuffleArray();
-
-                    PlayMatrix(mainMatrix);
-                    return;
-                case 3: //testdev
-
-
-                    return;
-
-                default:
-                    System.out.print("lame");
-                    break;
-            }
-        }catch (ArrayIndexOutOfBoundsException e){
-            System.err.print("ArrayIndexOutOfBoundsException");
+        if (args[0].isEmpty()){
+            System.out.print("тут будет UI");
         }
+        else{
+            if(args[0].equals("--console")){
+                try {
+                    Scanner sc = new Scanner(System.in);
+                    System.out.println("1: ввести матрицу");
+                    System.out.println("2: играть с рандомной");
 
+                    int fit = sc.nextInt();
+                    switch (fit) {
+                        case 1: //ввод
+                            System.out.println("введите размер матрицы:");
+                            int N = sc.nextInt();
+                            double[][] A = new double[N][N];
+                            double[] b = new double[N];
+                            ParseInputMatrix(A, b, N);
+                            SOLEMatrix readMatrix = new SOLEMatrix(N, A, b);
+
+                            PlayMatrix(readMatrix);
+                            return;
+
+
+                        case 2: //рандом
+                            System.out.println("введите размер матрицы:");
+                            int n = sc.nextInt();
+                            SOLEMatrix mainMatrix = new SOLEMatrix(n);
+                            mainMatrix.ShuffleArray();
+
+                            PlayMatrix(mainMatrix);
+                            return;
+                        case 3: //testdev
+                            System.out.println("введите размер матрицы:");
+                            int _n = sc.nextInt();
+                            double[][] A1 = new double[_n][_n];
+                            double[] b1 = new double[_n];
+                            ParseInputMatrix(A1, _n);
+                            Matrix mm=new Matrix(_n, A1);
+                            System.out.print(mm.Determinant());
+                            return;
+
+                        default:
+                            System.out.print("lame");
+                            break;
+                    }
+                }catch (ArrayIndexOutOfBoundsException e){
+                    System.err.print("ArrayIndexOutOfBoundsException");
+                }
+
+            }
+        }
 
         //launch(args);
     }
 
-    public static void ParseInputMatrix(double[][]A,double[]b,int N){
-        //TODO вынести в отдельную функцию парсинг этого всего
+    private static void ParseInputMatrix(double[][]A,double[]b,int N){
         for (int i=0; i < N; ++i) {
             System.out.println("введите "+(i+1)+" строку через пробел");
             Scanner sc2 = new Scanner(System.in);
@@ -72,7 +81,19 @@ public class main extends Application {
         }
     }
 
-    public static void ParseQuery(String query,SOLEMatrix mainMatrix)
+    private static void ParseInputMatrix(double[][]A,int N){
+        for (int i=0; i < N; ++i) {
+            System.out.println("введите "+(i+1)+" строку через пробел");
+            Scanner sc2 = new Scanner(System.in);
+            String rLine =sc2.nextLine();
+            String [] readLine=rLine.split("[ ]+");
+            for (int j=0; j < N; ++j){
+                A[i][j]=Integer.parseInt(readLine[j]);
+            }
+        }
+    }
+
+    private static void ParseQuery(String query,SOLEMatrix mainMatrix)
     {
 
         String[] tokens = query.split("[ ]+"); //4C1 + 2C2 =>   [4C1, +, 2C2]
@@ -121,7 +142,7 @@ public class main extends Application {
         }
     }
 
-    public static void PlayMatrix(SOLEMatrix mainMatrix){
+    private static void PlayMatrix(SOLEMatrix mainMatrix){
         Scanner sc = new Scanner(System.in);
         mainMatrix.PrintArray();
         System.out.println("_____________");

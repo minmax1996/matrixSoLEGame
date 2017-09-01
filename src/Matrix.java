@@ -36,6 +36,14 @@ public class Matrix {
         }
     }
 
+    Matrix(Matrix Second){
+        this.n=Second.n;
+        this.matrixArray=new Line[n];
+        for (int i = 0; i < n; ++i) {
+            matrixArray[i] = new Line(Second.matrixArray[i]);
+        }
+    }
+
 
     public Matrix SwapLines(int first, int second){
         for (int i = 0; i < n; ++i) {
@@ -93,20 +101,36 @@ public class Matrix {
         return new Matrix(this.n-1,A);
     }
 
+    public double Determinant(){
+        Matrix Array=new Matrix(this);
+        return Determinant(Array);
+    }
 
+    private double Determinant(Matrix Array){
+        if (Array.matrixArray[0].lineVector.length==2){
+            return Array.matrixArray[0].lineVector[0] * Array.matrixArray[1].lineVector[1]
+                    - Array.matrixArray[0].lineVector[1] * Array.matrixArray[1].lineVector[0];
+        }
+        else
+        {
+            double res=0;
+            int minRowValue=5;
+            int minRowIndex=0;
+            for(int j=0; j<Array.matrixArray.length; ++j){
+                if(Array.matrixArray[j].CountOfNotZeroElements() < minRowValue){
+                    minRowValue=Array.matrixArray[j].CountOfNotZeroElements(); //TODO переделать перевызов
+                    minRowIndex=j;
+                }
+            }
+            //на этом моменте мы определили самую "пустую" строку, теперь по ней нам надо найти определитель
 
-    public void Determinant(double[][] array){
-//        if (array[0].length==2){
-        //потом через рекурсию и миноры
-//            return array[0][0]*array[1][1]-array[0][1]*array[1][0];
-//        }
-//        else
-//        {
-//            double res=0;
-//            for(int i=0; i<array[0].length; ++i){
-//                if ()
-//                res+=
-//            }
-//        }
+            for(int i=0; i<Array.matrixArray.length; ++i){
+                if (Math.abs(Array.matrixArray[minRowIndex].lineVector[i])>=0.0001){
+                    res += (((i+1 + minRowIndex+1)%2==0)? 1: -1) * Array.matrixArray[minRowIndex].lineVector[i] * Determinant(Array.M(minRowIndex,i));
+                }
+            }
+
+            return res;
+        }
    }
 }
