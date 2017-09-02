@@ -19,7 +19,7 @@ public class Matrix {
     public Line [] matrixArray;
     public int n;
 
-    Matrix(int n) { //создаем еденичную матрицу со значениями 1..n и рандомным значением вектора [-5,5]
+    Matrix(int n) { //создаем еденичную матрицу размера n x n
         this.n=n;
         matrixArray = new Line[n];
         for (int i = 0; i < n; ++i) {
@@ -30,9 +30,9 @@ public class Matrix {
 
     Matrix(int n,double[][] a){
         this.n=n;
-        matrixArray=new Line[n];
+        matrixArray=new Line[a[0].length];
         for (int i = 0; i < n; ++i) {
-            matrixArray[i] = new Line(a[i] ,n);
+            matrixArray[i] = new Line(a[i] ,a[i].length);
         }
     }
 
@@ -44,6 +44,12 @@ public class Matrix {
         }
     }
 
+    public double get(int row, int column){
+        return this.matrixArray[row].lineVector[column];
+    }
+    public double[] get(int row){
+        return this.matrixArray[row].lineVector;
+    }
 
     public Matrix SwapLines(int first, int second){
         for (int i = 0; i < n; ++i) {
@@ -59,6 +65,7 @@ public class Matrix {
             for (int j = 0; j < n; ++j) {
                 System.out.printf("\t %s",matrixArray[i].lineVector[j]);
             }
+            System.out.println();
         }
     }
 
@@ -82,13 +89,17 @@ public class Matrix {
         return this;
     }
 
+    public Matrix MulMatrixVector(double [][] Vector){
+        //потом
+        return this;
+    }
     /*
     * выделение минора матрицы
     * пример: М23 матрица без 2 строки и 3 столбца
+    * пораждает новую матрицу
     * */
-    public Matrix M(int row,int column)
-    {
-        double[][] A = new double[this.n-1][this.matrixArray[0].n-1];
+    public Matrix M(int row,int column) {
+        double[][] A = new double[this.n-1][this.matrixArray[0].m-1];
 
         int line=0;
         for (int k=0; k<this.n; ++k) {
@@ -101,36 +112,62 @@ public class Matrix {
         return new Matrix(this.n-1,A);
     }
 
+    /*
+    * Нахождение определителя по нашей матрице, пораждает новую матрицу и ее разбивает на миноры
+    * */
     public double Determinant(){
         Matrix Array=new Matrix(this);
         return Determinant(Array);
     }
 
+    /*
+    * Нахождение определителя определенной матрицы
+    * */
     private double Determinant(Matrix Array){
         if (Array.matrixArray[0].lineVector.length==2){
-            return Array.matrixArray[0].lineVector[0] * Array.matrixArray[1].lineVector[1]
-                    - Array.matrixArray[0].lineVector[1] * Array.matrixArray[1].lineVector[0];
+            return Array.get(0,0) * Array.get(1,1)
+                    - Array.get(0,1) * Array.get(1,0);
         }
         else
         {
             double res=0;
             int minRowValue=5;
             int minRowIndex=0;
-            for(int j=0; j<Array.matrixArray.length; ++j){
-                if(Array.matrixArray[j].CountOfNotZeroElements() < minRowValue){
-                    minRowValue=Array.matrixArray[j].CountOfNotZeroElements(); //TODO переделать перевызов
-                    minRowIndex=j;
+            for(int i=0; i<Array.matrixArray.length; ++i){
+                if(Array.matrixArray[i].CountOfNotZeroElements() < minRowValue){
+                    minRowValue=Array.matrixArray[i].CountOfNotZeroElements(); //TODO переделать перевызов
+                    minRowIndex=i;
                 }
             }
             //на этом моменте мы определили самую "пустую" строку, теперь по ней нам надо найти определитель
 
-            for(int i=0; i<Array.matrixArray.length; ++i){
-                if (Math.abs(Array.matrixArray[minRowIndex].lineVector[i])>=0.0001){
-                    res += (((i+1 + minRowIndex+1)%2==0)? 1: -1) * Array.matrixArray[minRowIndex].lineVector[i] * Determinant(Array.M(minRowIndex,i));
+            for(int j=0; j<Array.matrixArray.length; ++j){
+                if (Math.abs(Array.matrixArray[minRowIndex].lineVector[j])>=0.0001){
+                    res += this.A(minRowIndex,j);
                 }
             }
 
             return res;
         }
    }
+
+    /*
+     * Нахождение транспонированной матрицы, пораждает новую
+     * */
+    public Matrix T(){
+        double [][] ResultArray=new double[n][n];
+        for (int i=0; i<n; ++i){
+            for(int j=0; j<n; ++j){
+                ResultArray[j][i]=this.get(i,j);
+            }
+        }
+        return new Matrix(n,ResultArray);
+    } //
+
+    /*
+    * нахождение алгебраического дополнения
+    * */
+    public double A(int i, int j){
+        return (((i+1 + j+1)%2==0)? 1: -1) * this.get(i,j) * Determinant(this.M(i,j));
+    }
 }

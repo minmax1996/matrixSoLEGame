@@ -100,4 +100,41 @@ public class MatrixTest {
         //добавить еще
     }
 
+    @org.junit.Test
+    public void t() throws Exception{
+        Matrix TestMatrix5=new Matrix(5,TestArray5);
+        double[][] Expected={{1,5,3,5,3},
+                            {2,4,8,3,1},
+                            {3,3,4,2,4},
+                            {4,2,2,1,1},
+                            {5,1,7,5,4}};
+
+        Matrix TestMatrixT=TestMatrix5.T(); //проверяем транспонированную
+        assertArrayEquals(Expected[0],TestMatrixT.matrixArray[0].lineVector, 0.0001);
+        assertArrayEquals(Expected[1],TestMatrixT.matrixArray[1].lineVector, 0.0001);
+        assertArrayEquals(Expected[2],TestMatrixT.matrixArray[2].lineVector, 0.0001);
+        assertArrayEquals(Expected[3],TestMatrixT.matrixArray[3].lineVector, 0.0001);
+        assertArrayEquals(Expected[4],TestMatrixT.matrixArray[4].lineVector, 0.0001);
+
+        Matrix TestMatrixTT=TestMatrix5.T().T(); //дважды транспонированная = начальная
+        assertArrayEquals(TestArray5[0],TestMatrixTT.matrixArray[0].lineVector, 0.0001);
+        assertArrayEquals(TestArray5[1],TestMatrixTT.matrixArray[1].lineVector, 0.0001);
+        assertArrayEquals(TestArray5[2],TestMatrixTT.matrixArray[2].lineVector, 0.0001);
+        assertArrayEquals(TestArray5[3],TestMatrixTT.matrixArray[3].lineVector, 0.0001);
+        assertArrayEquals(TestArray5[4],TestMatrixTT.matrixArray[4].lineVector, 0.0001);
+
+
+    }
+
+
+    @org.junit.Test
+    public void A() throws Exception{
+        double [][] TestA3={
+                {1,3,-3},
+                {4,2,2},
+                {1,4,-3}};
+        Matrix A3M=new Matrix(3,TestA3);
+        assertEquals(-14.0,A3M.A(0,0),0.0001);
+
+    }
 }

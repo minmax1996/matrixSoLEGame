@@ -4,28 +4,27 @@
 
 public class Line {
     public double [] lineVector;
-//    public double value;
-    int n;
+    int m;
 
-    Line(int _n){
-        n=_n;
-        lineVector = new double[n];
-        for (int i=0; i<n;++i) {
+    Line(int _m){
+        m=_m;
+        lineVector = new double[m];
+        for (int i=0; i<m;++i) {
             lineVector[i] = 0;
         }
     }
 
-    Line(double [] a, int n)
+    Line(double [] a, int m)
     {
-        this.n=n;
-        lineVector = new double[n];
+        this.m=m;
+        lineVector = new double[m];
         System.arraycopy(a, 0, lineVector, 0, a.length);
     }
 
     Line( Line second){
-        this.n=second.n;
-        this.lineVector=new double[n];
-        System.arraycopy(second.lineVector, 0, this.lineVector, 0, n);
+        this.m=second.m;
+        this.lineVector=new double[m];
+        System.arraycopy(second.lineVector, 0, this.lineVector, 0, m);
     }
 
     public Line MulVector(double number){
@@ -47,7 +46,7 @@ public class Line {
     }
 
     public Line AMulVector(double number){
-        Line res=new Line(this.n);
+        Line res=new Line(this.m);
         for (int i = 0; i < res.lineVector.length; ++i) {
             res.lineVector[i] = this.lineVector[i] * number;
         }
@@ -63,7 +62,7 @@ public class Line {
 
     public int CountOfNotZeroElements(){
         int count=0;
-        for (int i=0; i<this.n; ++i){
+        for (int i=0; i<this.m; ++i){
             if (this.lineVector[i]!=0.0) {
                 ++count;
             }
@@ -73,9 +72,9 @@ public class Line {
     }
 
     public double[] LineWithOut(int i){
-        double res[]=new double[this.n-1];
+        double res[]=new double[this.m-1];
         int j=0;
-        for (int k=0;k<this.n;++k){
+        for (int k=0;k<this.m;++k){
             if(k!=i){
                 res[j]=this.lineVector[k];
                 j++;
