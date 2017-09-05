@@ -14,10 +14,14 @@ import java.util.Random;
 
 
 public class Matrix {
-    public static final int RANDOM_BOUND = 10;
+    protected static final int RANDOM_BOUND = 10;
+    protected static final double eps=0.0001;
+
 
     public Line [] matrixArray;
     public int n;
+
+
 
     Matrix(int n) { //создаем еденичную матрицу размера n x n
         this.n=n;

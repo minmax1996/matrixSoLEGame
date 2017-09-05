@@ -126,6 +126,44 @@ public class SOLEMatrix extends Matrix {
         return this;
     }
 
+    public double [] getSolvedSolution(){
+        if(this.isSolved()){
+            double [] res = new double[this.n];
+            System.arraycopy(this.ValueVector,0,res,0,this.n);
+            return res;
+        }
+        else return null;
+    }
+
+    public boolean checkSolution(){
+        return (this.getSolvedSolution() != null) && checkSolution(this.getSolvedSolution());
+    }
+
+    public boolean checkSolution(double [] solution){
+        try {
+            for(int i=0;i<this.n;++i) {
+                if(Math.abs(checkSolution(i,solution)-this.ValueVector[i])>this.eps){
+                    return false;
+                }
+            }
+            return true;
+        }catch (IndexOutOfBoundsException e){
+            System.err.print(e.getMessage()+"\t"+e.getStackTrace().toString());
+            return false;
+        }
+    }
+
+    private double checkSolution(int row,double [] solution){
+        if(solution.length!=this.get(row).length){
+            throw new IndexOutOfBoundsException("разные размеры решения и уравнения");
+        }
+        double res=0;
+        for(int j=0;j<this.get(row).length;++j){
+            res+=this.get(row,j)*solution[j];
+        }
+        return res;
+    }
+
     /** @noinspection Since15*/
     public void ShuffleArray(){
         try {

@@ -34,6 +34,24 @@ public class SOLEMatrixTest {
     }
 
     @Test
+    public void getSolvedSolution() throws Exception{
+        double [][] SolvedArray4={
+                {1,0,0,0},
+                {0,1,0,0},
+                {0,0,1,0},
+                {0,0,0,1}};
+        double [] SolvedValue4={1,2,3,5};
+
+        SOLEMatrix TestSolvedMatrix5=new SOLEMatrix(4,SolvedArray4,SolvedValue4);
+        assertArrayEquals(SolvedValue4,TestSolvedMatrix5.getSolvedSolution(),0.0001);
+
+        TestSolvedMatrix5.SumVectors(2,3); //теперь не решено
+        assertArrayEquals(null,TestSolvedMatrix5.getSolvedSolution(),0.0001);
+        assertEquals(false,TestSolvedMatrix5.checkSolution());
+
+    }
+
+    @Test
     public void swapLines() throws Exception {
         SOLEMatrix TestMatrix5=new SOLEMatrix(5,TestArray5,TestValue5);
         TestMatrix5.SwapLines(2,3);
@@ -44,6 +62,7 @@ public class SOLEMatrixTest {
         assertArrayEquals(TestArray5[3],TestMatrix5.matrixArray[2].lineVector,0.0001);
         assertEquals(TestValue5[3],TestMatrix5.ValueVector[2],0.0001);
     }
+
 
     @Test
     public void sumVectors() throws Exception {
@@ -99,9 +118,8 @@ public class SOLEMatrixTest {
 
     }
 
-
     @Test
-    public void MatrixMethod() throws Exception {
+    public void matrixMethod() throws Exception {
         double [][] Example = {{3,2,-1},{2,-1,5},{1,7,-1}};
         double [] Val = {4,23,5};
         double [] Result = {2,1,4};
@@ -109,5 +127,19 @@ public class SOLEMatrixTest {
         double [] X=SLAU.MatrixMethod();
 
         assertArrayEquals(Result,X,0.0001);
+    }
+
+    @Test
+    public void checkSolution() throws Exception{
+        double [][] Example = {{3,2,-1},{2,-1,5},{1,7,-1}};
+        double [] Val = {4,23,5};
+        double [] Result = {2,1,4};
+        double [] WrongResult = {2,3,4};
+        double [] WrongDimension = {2,1,4,2};
+        SOLEMatrix SLAU=new SOLEMatrix(3,Example,Val);
+        assertEquals(true, SLAU.checkSolution(Result));
+        assertEquals(false, SLAU.checkSolution(WrongResult));
+        assertEquals(false, SLAU.checkSolution(WrongDimension));
+
     }
 }
