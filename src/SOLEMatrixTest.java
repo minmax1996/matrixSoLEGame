@@ -99,4 +99,15 @@ public class SOLEMatrixTest {
 
     }
 
+
+    @Test
+    public void MatrixMethod() throws Exception {
+        double [][] Example = {{3,2,-1},{2,-1,5},{1,7,-1}};
+        double [] Val = {4,23,5};
+        double [] Result = {2,1,4};
+        SOLEMatrix SLAU=new SOLEMatrix(3,Example,Val);
+        double [] X=SLAU.MatrixMethod();
+
+        assertArrayEquals(Result,X,0.0001);
+    }
 }

@@ -84,6 +84,13 @@ public class Matrix {
         return this;
     }
 
+    public Matrix MulMatrix(double MulValue){
+        for (int i=0; i<this.n; ++i){
+            this.MulVector(i,MulValue);
+        }
+        return this;
+    }
+
     public Matrix DivVector(int first, double DivValue){
         this.matrixArray[first].DivVector(DivValue);
         return this;
@@ -143,7 +150,7 @@ public class Matrix {
 
             for(int j=0; j<Array.matrixArray.length; ++j){
                 if (Math.abs(Array.matrixArray[minRowIndex].lineVector[j])>=0.0001){
-                    res += this.A(minRowIndex,j);
+                    res += this.A(minRowIndex,j)*this.get(minRowIndex,j);
                 }
             }
 
@@ -168,6 +175,6 @@ public class Matrix {
     * нахождение алгебраического дополнения
     * */
     public double A(int i, int j){
-        return (((i+1 + j+1)%2==0)? 1: -1) * this.get(i,j) * Determinant(this.M(i,j));
+        return (((i+1 + j+1)%2==0)? 1: -1) * Determinant(this.M(i,j));
     }
 }

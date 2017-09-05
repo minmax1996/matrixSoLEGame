@@ -1,3 +1,4 @@
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Union;
 import javafx.scene.Parent;
 
 import java.io.File;
@@ -125,7 +126,6 @@ public class SOLEMatrix extends Matrix {
         return this;
     }
 
-
     /** @noinspection Since15*/
     public void ShuffleArray(){
         try {
@@ -151,6 +151,43 @@ public class SOLEMatrix extends Matrix {
         } catch (FileNotFoundException e) {
             System.err.print(Arrays.toString(e.getStackTrace()));
         }
+    }
+
+    //Матричный метод решения
+    public double [] MatrixMethod(){
+        double[] X=new double[this.n];
+
+        //убедимся, что определитель не равен 0;
+        double Det=this.Determinant();
+        System.out.println("det ="+Det);
+        if (Det==0){
+            return X;
+        }
+
+        //создадим союзную матрицу, собранную из алгебраических дополнений
+        double [][] UnionMatrix=new double[this.n][this.n];
+        for (int i=0; i<this.n; ++i){
+            for (int j=0; j<this.n; ++j){
+                UnionMatrix[i][j]=this.A(i,j);
+            }
+        }
+        Matrix Union =new Matrix(this.n,UnionMatrix);
+        System.out.println("________");
+        Union.PrintArray();
+
+        //умножив транспонированную союзную матрицу на 1/Det получаем обратную матрицу
+        Matrix Am1 = Union.T().MulMatrix(1/Det);
+
+        //теперь перемножив обратную матрицу на вектор значений получаем ответ
+        for (int i=0; i<this.n; ++i) {
+            for (int j=0; j<this.n; ++j){
+                X[i]+=Am1.get(i,j)*this.ValueVector[j];
+            }
+            //X[i]=Math.round(X[i]); //округленное
+            System.out.println("X"+i+"="+X[i]);
+        }
+
+        return X;
     }
 }
 
